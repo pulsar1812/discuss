@@ -15,40 +15,47 @@ import {
 import * as actions from '@/actions'
 import FormButton from '../common/FormButton'
 
-export default function TopicCreateForm() {
-  const [formState, formAction] = useFormState(actions.createTopic, {
-    errors: {},
-  })
+interface PostCreateFormProps {
+  slug: string
+}
+
+export default function PostCreateForm({ slug }: PostCreateFormProps) {
+  const [formState, formAction] = useFormState(
+    actions.createPost.bind(null, slug),
+    {
+      errors: {},
+    }
+  )
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   return (
     <>
-      <Button onPress={onOpen}>Create a Topic</Button>
+      <Button onPress={onOpen}>Create a Post</Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className='flex flex-col gap-1'>
-                Create a Topic
+                Create a Post
               </ModalHeader>
               <ModalBody>
                 <form action={formAction}>
                   <div className='flex flex-col gap-4 p-4 w-80'>
                     <Input
-                      name='name'
-                      label='Name'
+                      name='title'
+                      label='Title'
                       labelPlacement='outside'
-                      placeholder='Input topic name here...'
-                      isInvalid={!!formState.errors.name}
-                      errorMessage={formState.errors.name?.join('. ')}
+                      placeholder='Input post title here...'
+                      isInvalid={!!formState.errors.title}
+                      errorMessage={formState.errors.title?.join('. ')}
                     />
                     <Textarea
-                      name='description'
-                      label='Description'
+                      name='content'
+                      label='Content'
                       labelPlacement='outside'
-                      placeholder='Input topic description here...'
-                      isInvalid={!!formState.errors.description}
-                      errorMessage={formState.errors.description?.join('. ')}
+                      placeholder='Input post content here...'
+                      isInvalid={!!formState.errors.content}
+                      errorMessage={formState.errors.content?.join('. ')}
                     />
 
                     {formState.errors._form ? (
